@@ -11,7 +11,7 @@ These instructions will help you get the data needed to run the benchmark as wel
 
 ### Prerequisites
 
-To get the data, you will need a [MATLAB licence](https://fr.mathworks.com/products/matlab.html) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/).
+To simulate the data need to run the benchmark, you will need a [MATLAB licence](https://fr.mathworks.com/products/matlab.html) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/).
 
 To run the benchmark, you will need the following ```Python 3.6``` libraries
 ```
