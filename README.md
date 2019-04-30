@@ -26,3 +26,19 @@ statsmodels 0.9.0
 tensorboard 1.12.0
 tensorflow-gpu 1.12.0
 ```
+
+### Data Simulation
+
+* Copy the %scenario_file% into the %matlab_t1dms_scenario_folder%. The files describes the scenario the virtual patients will follow during the simulation.
+* Copy the %mat2csv_file% into the %matlab_t1dms_folder%
+* Set random seed in Matlab console
+* Launch T1DMS GUI:
+** Select scenario file, 
+** Add the 10 adults, adolescents, and children
+** Select IV sensor and pumps
+** Set seed to 1
+** Launch Simulation
+* Convert the simulated .mat files into CSV using the function %mat2csv_file%
+``` test test ```
+* Make sure the simulated data are right by check the CHA52 checksum, which should be equal to
+``` checksum ```
