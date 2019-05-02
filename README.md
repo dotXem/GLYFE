@@ -42,3 +42,8 @@ tensorflow-gpu 1.12.0
 ``` test test ```
 * Make sure the simulated data are right by check the CHA52 checksum, which should be equal to
 ``` checksum ```
+
+
+# TODO
+
+* exclude basal insulin from data in dat2csv in Matlab
