@@ -43,7 +43,13 @@ tensorflow-gpu 1.12.0
 * Make sure the simulated data are right by check the CHA52 checksum, which should be equal to
 ``` checksum ```
 
+## How to use the benchmark
 
-# TODO
+### Run the benchmark on an existing model
+
+### Run the benchmark on a new model
+
+
+## TODO
 
 * exclude basal insulin from data in dat2csv in Matlab
