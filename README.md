@@ -96,5 +96,6 @@ To create a new model, one should follow these steps:
 # TODO
 
 * Add References section;
+* Update introduction;
 * Change the DOI of the repository once the paper is submitted;
 * Provide with the DOI of the paper once published;
