@@ -45,17 +45,21 @@ tensorflow-gpu 1.12.0
 * In the Matlab console type ```rng(1,"twister")```
 * Launch the T1DMS GUI by typing ```Simulator```
 * In the GUI:
-  * Select the scenario file ```GLYFE.scn```
-  * Add List All and Remove Averages
-  * Hardware: IV, Generic
-  * Pretests: None
-  * Random Seed: 1
+  * Load Scenario: ```Select Scenario Files``` => ```GLYFE.scn```
+  * Select Subject: ```Add List > All``` and then ```Remove List > Averages```
+  * Hardware: ```Built-in```
+   * Sensors: ```IV```
+   * Pumps: ```Generic```
+  * Pre-tests/screening: ```none```
+  * enter random seed: ```1```
   
 ![T1DMS_GUI](_T1DMS/GUI.png)
-* Launch the simulation
+
+* Click on ```Run Simulation``` (it may take several hours, updates are displayed in the console)
 * After the simulation has ended:
   * Convert the results files (give name) into CSV by running
   * On the resulting folder, compute the SHA256 checksum and make sure it equals: 
+  
 ```
 658BDBFF19021E3C547F5CB0C9511390281ADDAA882A1E26E9726EB5243FC077
 ```
