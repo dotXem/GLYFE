@@ -26,12 +26,18 @@ def standardization(train, valid, test):
         test_scaled_tmp = scaler.transform(test_set)
 
         # reshape df = day
-        train_scaled_tmp = [pd.DataFrame(train_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time","glucose","CHO","insulin"]) for i in
-                            range(len(train_scaled_tmp) // df_len)]
-        valid_scaled_tmp = [pd.DataFrame(valid_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time","glucose","CHO","insulin"]) for i in
-                            range(len(valid_scaled_tmp) // df_len)]
-        test_scaled_tmp = [pd.DataFrame(test_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time","glucose","CHO","insulin"]) for i in
-                           range(len(test_scaled_tmp) // df_len)]
+        train_scaled_tmp = [
+            pd.DataFrame(train_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time", "glucose", "CHO", "insulin"])
+            for i in
+            range(len(train_scaled_tmp) // df_len)]
+        valid_scaled_tmp = [
+            pd.DataFrame(valid_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time", "glucose", "CHO", "insulin"])
+            for i in
+            range(len(valid_scaled_tmp) // df_len)]
+        test_scaled_tmp = [
+            pd.DataFrame(test_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time", "glucose", "CHO", "insulin"])
+            for i in
+            range(len(test_scaled_tmp) // df_len)]
 
         # save the results
         train_scaled.append(train_scaled_tmp)

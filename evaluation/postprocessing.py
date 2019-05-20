@@ -8,5 +8,5 @@ def rescale(results, scalers):
     for i in range(len(scalers)):
         mean = scalers[i].mean_[1]
         std = scalers[i].scale_[1]
-        results[:,i,:] = results[:,i,:] * std + mean
+        results[:, i, :] = results[:, i, :] * std + mean
     return results

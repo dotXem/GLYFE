@@ -15,7 +15,7 @@ class ELM(Predictor):
     """
 
     def fit(self):
-        print("fit",self.params["neurons"])
+        print("fit", self.params["neurons"])
         # get training data
         x, y = self._str2dataset("train")
 

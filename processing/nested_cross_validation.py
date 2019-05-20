@@ -36,7 +36,7 @@ def nested_cross_validation(subject, model_class, ph, params, search, train, val
                         y_true, y_pred = model.predict(dataset="valid")
                         results_tmp.append(RMSE(y_true, y_pred))
                     results.append(results_tmp)
-                return grid[np.argmin(np.mean(np.transpose(results),axis=0))]
+                return grid[np.argmin(np.mean(np.transpose(results), axis=0))]
 
             # compute the best coarse params on the inner loop
             best_coarse_params = params_search(coarse_params_grid)
@@ -57,4 +57,4 @@ def nested_cross_validation(subject, model_class, ph, params, search, train, val
             y_true, y_pred = model.predict(dataset="test")
             results.append(np.c_[y_true.reshape(-1, 1), y_pred.reshape(-1, 1)])
 
-    return np.rollaxis(np.array(results),2)
+    return np.rollaxis(np.array(results), 2)

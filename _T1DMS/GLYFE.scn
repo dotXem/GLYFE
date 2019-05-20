@@ -1,0 +1,18 @@
+simulation info
+%Tclosed=0
+%Tsimul=29
+%QTsimul=day
+
+meals timing info
+%Tmeals = 0.5 * randn(1,87) + reshape(( (24*(0:28))' + [7 13 20] .* ones(29,3))',1,[])
+%QTmeals=hour
+
+meals quantity info
+%Ameals= (1+0.75/3*randn(1,87)) .* reshape(([40 85 60] .* ones(29,3))',1,[])
+%Dmeals=15
+
+bolus insulin info
+%OB=on
+
+basal insulin info
+%Qbasal=quest

@@ -23,5 +23,5 @@ class BASE(Predictor):
         """
         x, y = super()._reshape(data)
         glucose_index = self.params["hist"] - 1
-        x = x.loc[:,"glucose_" + str(glucose_index)]
+        x = x.loc[:, "glucose_" + str(glucose_index)]
         return x, y

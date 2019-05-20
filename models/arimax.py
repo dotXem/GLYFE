@@ -81,7 +81,7 @@ class ARIMAX(Predictor):
                 y_pred.append(model.predict(start, end, dynamic)[-1])
                 y_true.append(endog_d[end])
 
-        return np.reshape(y_true,(-1,1)), np.reshape(y_pred,(-1,1))
+        return np.reshape(y_true, (-1, 1)), np.reshape(y_pred, (-1, 1))
 
     def _reshape(self, data):
         """

@@ -1,7 +1,5 @@
 from evaluation.postprocessing import rescale
 import numpy as np
-from evaluation.cg_ega import AP_BE_EP
-from evaluation.rmse import RMSE
 import sys
 import argparse
 from os.path import join
@@ -11,8 +9,6 @@ from formatting.train_valid_test_split import train_valid_test_split
 from preprocessing.standardization import standardization
 import misc.constants as cs
 from processing.nested_cross_validation import nested_cross_validation
-from misc.utils import printd
-from preprocessing.x_y_reshape import x_y_reshape
 from pathlib import Path
 
 """ This is the source code the benchmark GLYFE for glucose prediction in diabetes.
@@ -28,7 +24,7 @@ def main(args):
     subject = args.subject if args.subject is not None else "adult#001"
 
     # retrieve model class from args
-    model_name = args.model if args.model else "base"
+    model_name = args.model if args.model else "_base"
     model_class = locate("models." + model_name + "." + model_name.upper())
 
     # retrieve the prediction horizon
@@ -46,7 +42,6 @@ def main(args):
 
     """ DATA PREPROCESSING """
     train, valid, test, scalers = standardization(train, valid, test)  # standardize the data
-    # train, valid, test = x_y_reshape(train, valid, test, params["hist"], ph)  # generic reshape of data for the models
 
     """ MODEL TRAINING, TUNING AND EVALUATION """
     results = nested_cross_validation(subject, model_class, ph, params, search, train, valid, test)
@@ -56,8 +51,7 @@ def main(args):
 
     # save results
     Path(join(cs.path, "results", model_name, "ph-" + str(ph))).mkdir(parents=True, exist_ok=True)
-    np.save(join(cs.path, "results", model_name, "ph-" + str(ph),
-                 model_name + "_ph-" + str(ph) + "_" + subject + "_results.npy"),
+    np.save(join(cs.path, "results", model_name, "ph-" + str(ph), subject + ".npy"),
             np.array(results))
 
 
@@ -65,7 +59,7 @@ if __name__ == "__main__":
     """ The main function contains the following optional parameters:
             --log: file where the standard outputs will be redirected to (e.g., svr_adult#001); default: logs stay in stdout;
             --subject: subject for which the benchmark will be run (e.g., "adult#001"); default: adult_1;
-            --model: model on which the benchmark will be run (e.g., "svr"); need to be lowercase; default: base;
+            --model: model on which the benchmark will be run (e.g., "svr"); need to be lowercase; default: _base;
             --ph: the prediction horizon of the models; default 30 minutes;
             --params: alternative parameters file (e.g., svr_2); default: %model%; """
 
