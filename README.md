@@ -58,11 +58,7 @@ tensorflow-gpu 1.12.0
 * Click on ```Run Simulation``` (it may take several hours, updates are displayed in the console)
 * After the simulation has ended:
   * Convert the results files (give name) into CSV by running
-  * On the resulting folder, compute the SHA256 checksum and make sure it equals: 
-  
-```
-658BDBFF19021E3C547F5CB0C9511390281ADDAA882A1E26E9726EB5243FC077
-```
+  * On the resulting folder, compute the SHA256 checksum and make sure it equals: ```658BDBFF19021E3C547F5CB0C9511390281ADDAA882A1E26E9726EB5243FC077```
 
  * Copy the folder into the ```GLYFE``` folder.
 
