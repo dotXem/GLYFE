@@ -49,6 +49,7 @@ tensorflow-gpu 1.12.0
   * Hardware: IV, Generic
   * Pretests: None
   * Random Seed: 1
+![T1DMS_GUI](_T1DMS/GUI.png)
 * Launch the simulation
 * After the simulation has ended:
   * Convert the results files (give name) into CSV by running
