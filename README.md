@@ -16,15 +16,17 @@ To simulate the data need to run the benchmark, you will need a [MATLAB](https:/
 To run the benchmark, you will need the following ```Python 3.6``` libraries
 ```
 Keras 2.2.4
-numpy 1.15.4
+matplotlib 3.0.3
+numpy 1.16.3
 pandas 0.23.4
+patsy 0.5.1
 pip 9.0.1
 scikit-learn 0.20.1
-scipy 1.1.0
+scipy 1.2.1
 setuptools 28.8.0
 statsmodels 0.9.0
-tensorboard 1.12.0
-tensorflow-gpu 1.12.0
+tensorboard 1.13.1
+tensorflow-gpu 1.13.1
 ```
 
 ### Data Simulation
@@ -64,9 +66,20 @@ tensorflow-gpu 1.12.0
 
 ## How to use the benchmark
 
+There are two different ways to use the benchmark code: either rerun the models presented on the original paper or run the benchmark on new models.
+
 ### Run the benchmark on an existing model
 
-### Run the benchmark on a new model
+Go in the GLYFE directory and run the command: ```python main.py --subject={subject} --model={model} --ph={ph} --params={params} --log={logs}``` where:
+* ```subject``` is the name of the subject on which the benchmark will be run on (```child#001``` to ```child#010```, ```adolescent#001``` to ```adolescent#010```, and ```adult#001``` to ```adult#010```);
+* ```model``` is the name of the model to be used; the following are implemented: ```arimax```, ```base```, ```elm```, ```ffnn```, ```gp```, ```lstm```, ```poly```, ```svr```;
+* ```ph``` is the prediction horizon (in minutes); in the benchmark, values of ```30```, ```60```, and ```120``` have been used;
+* ```params``` (optional) gives the name of an alternative parameter file (in the ```params``` folder) to the default parameter file (which is the same as the name of the model);
+* ```logs``` (optional) specifies the file in which the logs of the benchmark shall be written in (inside the ```logs``` directory); by default, the logs are printed in the console;
+
+One can run several subjects or prediction horizons at once by using the ```run_batch``` function.
+
+### Create a new model
 
 
 ## TODO
