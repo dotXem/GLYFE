@@ -11,7 +11,7 @@ These instructions will help you get the data needed to run the benchmark as wel
 
 ### Prerequisites
 
-To simulate the data need to run the benchmark, you will need a [MATLAB](https://fr.mathworks.com/products/matlab.html) (R2018b has been used) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/) (v3.2.1).
+To simulate the data need to run the benchmark, you will need a [MATLAB](https://fr.mathworks.com/products/matlab.html) (here, the R2018b version under Windows has been used) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/) (v3.2.1).
 
 To run the benchmark, you will need the following ```Python 3.6``` libraries
 ```
@@ -60,10 +60,10 @@ tensorflow-gpu 1.13.1
 * Click on ```Run Simulation``` (it may take several hours, updates are displayed in the console)
 * After the simulation has ended:
   * The results are contained in the ```sim_results.mat``` file;
-  * Convert the results files (give name) into CSV by running ```results2csv(
-  * On the resulting folder, compute the SHA-256 (data) checksum and make sure it equals: ```B468B132C2F20AA40B6B7E495094800A0B6A490CFC5DB02A475BBDF54936A35D```
+  * Convert the results files (give name) into CSV by running ```results2csv("sim_results.mat","data")```. The resulting files are located in the ```data``` folder;
+  * Compute the SHA-256 (data) checksum of the ```data``` folder and make sure it equals: ```B468B132C2F20AA40B6B7E495094800A0B6A490CFC5DB02A475BBDF54936A35D```
 
- * Copy the folder into the ```GLYFE``` folder.
+ * Copy the ```data```folder into the ```GLYFE``` folder.
 
 ## How to use the benchmark
 
