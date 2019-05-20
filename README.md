@@ -11,7 +11,7 @@ These instructions will help you get the data needed to run the benchmark as wel
 
 ### Prerequisites
 
-To simulate the data need to run the benchmark, you will need a [MATLAB licence](https://fr.mathworks.com/products/matlab.html) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/).
+To simulate the data need to run the benchmark, you will need a [MATLAB](https://fr.mathworks.com/products/matlab.html)(the R2018b version has been used here) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/) (v3.2.1).
 
 To run the benchmark, you will need the following ```Python 3.6``` libraries
 ```
@@ -29,8 +29,13 @@ tensorflow-gpu 1.12.0
 
 ### Data Simulation
 
-* Copy the %scenario_file% into the %matlab_t1dms_scenario_folder%. The files describes the scenario the virtual patients will follow during the simulation.
-* Copy the %mat2csv_file% into the %matlab_t1dms_folder%
+* Copy and paste the ```./T1DMS/GLYFE.scn``` scenario file into the ```scenario folder``` of the T1DMS installation folder (named ```UVa PadovaT1DM Simulator v3.2.1```). The files describes the scenario the virtual patients will follow during the simulation.
+* Copy and paste the ```./T1DMS/results2csv.m``` file into the T1DMS installation folder.
+* Modify the Simulink schematics:
+** Open the file ```testing_platform.slx``` under the T1DMS installation folder in Matlab.
+** Double click the "STD_Treat_v3_2" big orange block.
+** Modify the schematics as follows:
+
 * Set random seed in Matlab console
 * Launch T1DMS GUI:
 ** Select scenario file, 
@@ -43,7 +48,13 @@ tensorflow-gpu 1.12.0
 * Make sure the simulated data are right by check the CHA52 checksum, which should be equal to
 ``` checksum ```
 
+## How to use the benchmark
 
-# TODO
+### Run the benchmark on an existing model
+
+### Run the benchmark on a new model
+
+
+## TODO
 
 * exclude basal insulin from data in dat2csv in Matlab
