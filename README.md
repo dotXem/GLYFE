@@ -77,11 +77,18 @@ Go in the GLYFE directory and run the command: ```python main.py --subject={subj
 * ```params``` (optional) gives the name of an alternative parameter file (in the ```params``` folder) to the default parameter file (which is the same as the name of the model);
 * ```logs``` (optional) specifies the file in which the logs of the benchmark shall be written in (inside the ```logs``` directory); by default, the logs are printed in the console;
 
-One can run several subjects or prediction horizons at once by using the ```run_batch``` function.
+One can run several subjects, models, or prediction horizons at once by using the ```run_batch``` function.
 
 ### Create a new model
 
-
-## TODO
-
-* exclude basal insulin from data in dat2csv in Matlab
+To create a new model, one should follow these steps:
+* Create the model:
+ * Create a file inside the ```models``` directory, its name should be the name of the model and to be lowercase;
+ * Inside the created file, create a class which name should be the name of the file (uppercase); it should inherit the ```models.predictor.Predictor``` class;
+ * Override the functions ```fit```, ```predict``` (and ```_reshape``` if needed) following the instructions in  ```models._template.npy```;
+* Create the parameter file:
+ * Create a file with the same name as the model (lowercase) in the ```params``` directory;
+ * Inside the created file, create two dictionaries named ```parameters``` and ```search```:
+  * ```parameters``` represents the hyperparameters of the model; one can look at ```models._template.npy``` to see how to fill it;
+  * ```search``` represents the list of the hyperparameters that are automatically optimized with the coarse-to-fine methodology presented in the paper; as for the ```params``` dictionary, one can look at the ```_template``` file to fill it;
+* To run the benchmark on the newly created model, just run the ```main``` function with the name of the model as the ```model``` parameter!
