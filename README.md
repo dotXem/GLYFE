@@ -11,7 +11,7 @@ These instructions will help you get the data needed to run the benchmark as wel
 
 ### Prerequisites
 
-To simulate the data need to run the benchmark, you will need a [MATLAB](https://fr.mathworks.com/products/matlab.html)(the R2018b version has been used here) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/) (v3.2.1).
+To simulate the data need to run the benchmark, you will need a [MATLAB](https://fr.mathworks.com/products/matlab.html) (R2018b has been used) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/) (v3.2.1).
 
 To run the benchmark, you will need the following ```Python 3.6``` libraries
 ```
@@ -29,24 +29,33 @@ tensorflow-gpu 1.12.0
 
 ### Data Simulation
 
+#### Setup the environment
+
 * Copy and paste the ```./T1DMS/GLYFE.scn``` scenario file into the ```scenario folder``` of the T1DMS installation folder (named ```UVa PadovaT1DM Simulator v3.2.1```). The files describes the scenario the virtual patients will follow during the simulation.
 * Copy and paste the ```./T1DMS/results2csv.m``` file into the T1DMS installation folder.
 * Modify the Simulink schematics:
-** Open the file ```testing_platform.slx``` under the T1DMS installation folder in Matlab.
-** Double click the "STD_Treat_v3_2" big orange block.
-** Modify the schematics as follows:
+  * Open the file ```testing_platform.slx``` under the T1DMS installation folder in Matlab.
+  * Double click the "STD_Treat_v3_2" big orange block.
+  * Modify the schematics as follows:
+![T1DMS_simulink_change](_T1DMS/simulink_schematics_change.png)
 
-* Set random seed in Matlab console
-* Launch T1DMS GUI:
-** Select scenario file, 
-** Add the 10 adults, adolescents, and children
-** Select IV sensor and pumps
-** Set seed to 1
-** Launch Simulation
-* Convert the simulated .mat files into CSV using the function %mat2csv_file%
-``` test test ```
-* Make sure the simulated data are right by check the CHA52 checksum, which should be equal to
-``` checksum ```
+#### Launch Simulation
+
+* In the Matlab console type ```rng(1,"twister")```
+* Launch the T1DMS GUI by typing ```Simulator```
+* In the GUI:
+  * Select the scenario file ```GLYFE.scn```
+  * Add List All and Remove Averages
+  * Hardware: IV, Generic
+  * Pretests: None
+  * Random Seed: 1
+* Launch the simulation
+* After the simulation has ended:
+  * Convert the results files (give name) into CSV by running
+  * On the resulting folder, compute the SHA256 checksum and make sure it equals: 
+```
+658BDBFF19021E3C547F5CB0C9511390281ADDAA882A1E26E9726EB5243FC077
+```
 
 ## How to use the benchmark
 
