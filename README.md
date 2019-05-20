@@ -11,7 +11,7 @@ These instructions will help you get the data needed to run the benchmark as wel
 
 ### Prerequisites
 
-To simulate the data need to run the benchmark, you will need a [MATLAB licence](https://fr.mathworks.com/products/matlab.html) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/).
+To simulate the data need to run the benchmark, you will need a [MATLAB](https://fr.mathworks.com/products/matlab.html)(the R2018b version has been used here) and a [T1DMS licence](https://tegvirginia.com/software/t1dms/) (v3.2.1).
 
 To run the benchmark, you will need the following ```Python 3.6``` libraries
 ```
@@ -29,7 +29,7 @@ tensorflow-gpu 1.12.0
 
 ### Data Simulation
 
-* Copy the %scenario_file% into the %matlab_t1dms_scenario_folder%. The files describes the scenario the virtual patients will follow during the simulation.
+* Copy the ```GLYFE.scn``` scenario file into the  into the %matlab_t1dms_scenario_folder%. The files describes the scenario the virtual patients will follow during the simulation.
 * Copy the %mat2csv_file% into the %matlab_t1dms_folder%
 * Set random seed in Matlab console
 * Launch T1DMS GUI:
