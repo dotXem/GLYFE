@@ -35,7 +35,7 @@ tensorflow-gpu 1.12.0
 ** Open the file ```testing_platform.slx``` under the T1DMS installation folder in Matlab.
 ** Double click the "STD_Treat_v3_2" big orange block.
 ** Modify the schematics as follows:
-
+![alt text](_T1DMS/simulink_schematics_change.png)
 * Set random seed in Matlab console
 * Launch T1DMS GUI:
 ** Select scenario file, 
