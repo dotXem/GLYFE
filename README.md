@@ -59,7 +59,7 @@ tensorflow-gpu 1.13.1
 
 * Click on ```Run Simulation``` (it may take several hours, updates are displayed in the console)
 * After the simulation has ended:
-  * The results are contained in the ```sim_results.mat``` file;
+  * Say OK to the pop-up asking for a file name; the results are contained in the ```sim_results.mat``` file;
   * Convert the results files (give name) into CSV by running ```results2csv("sim_results.mat","data")```. The resulting files are located in the ```data``` folder;
   * Compute the SHA-256 (data) checksum of the ```data``` folder and make sure it equals: ```B468B132C2F20AA40B6B7E495094800A0B6A490CFC5DB02A475BBDF54936A35D```
 
