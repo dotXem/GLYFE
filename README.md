@@ -31,7 +31,7 @@ tensorflow-gpu 1.12.0
 
 #### Setup the environment
 
-* Copy and paste the ```./T1DMS/GLYFE.scn``` scenario file into the ```scenario folder``` of the T1DMS installation folder (named ```UVa PadovaT1DM Simulator v3.2.1```). The files describes the scenario the virtual patients will follow during the simulation.
+* Copy and paste the ```GLYFE/T1DMS/GLYFE.scn``` scenario file into the ```scenario``` folder of the T1DMS installation folder (named ```UVa PadovaT1DM Simulator v3.2.1```). The files describes the scenario the virtual patients will follow during the simulation.
 * Copy and paste the ```./T1DMS/results2csv.m``` file into the T1DMS installation folder.
 * Modify the Simulink schematics:
   * Open the file ```testing_platform.slx``` under the T1DMS installation folder in Matlab.
@@ -63,6 +63,8 @@ tensorflow-gpu 1.12.0
 ```
 658BDBFF19021E3C547F5CB0C9511390281ADDAA882A1E26E9726EB5243FC077
 ```
+
+ * Copy the folder into the ```GLYFE``` folder.
 
 ## How to use the benchmark
 
