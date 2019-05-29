@@ -95,8 +95,4 @@ To create a new model, one should follow these steps:
 * To run the benchmark on the newly created model, just run the ```main``` function with the name of the model as the ```model``` parameter!
 
 # TODO
-
-* Add References section;
-* Update introduction;
-* Change the DOI of the repository once the paper is submitted;
 * Provide with the DOI of the paper once published;
