@@ -9,7 +9,7 @@ all = np.r_[children, adolescents, adults]
 
 batch_grid = {
     "log": [None],
-    "subject": all,
+    "subject": adults,
     "model": ["base"],
     "ph": [30, 60, 120],
     "params": [None],
