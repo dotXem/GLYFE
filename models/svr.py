@@ -29,7 +29,7 @@ class SVR(Predictor):
                          cache_size=self.CACHE_SIZE)
 
         # fit the model
-        self.model.fit(x[:100], y[:100])
+        self.model.fit(x, y)
 
     def predict(self, dataset):
         # get the data for which we make the predictions

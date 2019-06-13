@@ -45,8 +45,3 @@ class ELM(Predictor):
         y_true = y.values
 
         return y_true, y_pred
-
-    # def _reshape(self, data):
-    #     y = data["y"]
-    #     x = data.drop("y", axis=1)
-    #     return x, y
