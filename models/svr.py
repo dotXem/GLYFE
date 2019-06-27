@@ -12,7 +12,7 @@ class SVR(Predictor):
         - self.params["C"], loss
         - self.params["epsilon"], wideness of the no-penalty tube
         - self.params["gamma"], kernel coefficient
-        - self.params["shrinking"], wether or not tp ise the shrinkin heuristic
+        - self.params["shrinking"], wether or not to use the shrinkin heuristic
     """
     CACHE_SIZE = 8000  # in Mb, allow more cache to the fitting of the model; might need to be changed depending on the system.
 
