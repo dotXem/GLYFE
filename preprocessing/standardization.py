@@ -1,48 +1,44 @@
-from sklearn.preprocessing import StandardScaler
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
-
-def standardization(train, valid, test):
+def standardize(train, valid, test):
     """
-    Standardize (zero-mean and unit-variance) the datasets.
-    :param train: array of DataFrames representing the processing sets
-    :param valid: array of DataFrames representing the validation sets
-    :param test:  array of DataFrames representing the testing sets
-    :return: the datasets standardized based on the processing sets
+    Standardize (zero mean and unit variance) the sets w.r.t to the training set for every fold
+    :param train: training sample fold
+    :param valid: validation sample fold
+    :param test: testing sample fold
+    :return: standardized training, validation, and testing sets
     """
+    columns = train[0].columns.drop("datetime")
     train_scaled, valid_scaled, test_scaled, scalers = [], [], [], []
-    for train_set, valid_set, test_set in zip(train, valid, test):
-        df_len = len(train_set[0].index)
-
-        # merge the dataframes before standardizing
-        train_set = pd.concat(train_set).reindex()
-        valid_set = pd.concat(valid_set).reindex()
-        test_set = pd.concat(test_set).reindex()
-
-        # standardize
+    for i in range(len(train)):
         scaler = StandardScaler()
-        train_scaled_tmp = scaler.fit_transform(train_set)
-        valid_scaled_tmp = scaler.transform(valid_set)
-        test_scaled_tmp = scaler.transform(test_set)
 
-        # reshape df = day
-        train_scaled_tmp = [
-            pd.DataFrame(train_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time", "glucose", "CHO", "insulin"])
-            for i in
-            range(len(train_scaled_tmp) // df_len)]
-        valid_scaled_tmp = [
-            pd.DataFrame(valid_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time", "glucose", "CHO", "insulin"])
-            for i in
-            range(len(valid_scaled_tmp) // df_len)]
-        test_scaled_tmp = [
-            pd.DataFrame(test_scaled_tmp[i * df_len:(i + 1) * df_len], columns=["time", "glucose", "CHO", "insulin"])
-            for i in
-            range(len(test_scaled_tmp) // df_len)]
+        # standardize the sets (-> ndarray) without datetime
+        train_i = scaler.fit_transform(train[i].drop("datetime", axis=1))
+        valid_i = scaler.transform(valid[i].drop("datetime", axis=1))
+        test_i = scaler.transform(test[0].copy().drop("datetime", axis=1))
 
-        # save the results
-        train_scaled.append(train_scaled_tmp)
-        valid_scaled.append(valid_scaled_tmp)
-        test_scaled.append(test_scaled_tmp)
+        # recreate dataframe
+        train_i = pd.DataFrame(data=train_i, columns=columns)
+        valid_i = pd.DataFrame(data=valid_i, columns=columns)
+        test_i = pd.DataFrame(data=test_i, columns=columns)
+
+        # add datetime
+        train_i["datetime"] = pd.DatetimeIndex(train[i].loc[:, "datetime"].values)
+        valid_i["datetime"] = pd.DatetimeIndex(valid[i].loc[:, "datetime"].values)
+        test_i["datetime"] = pd.DatetimeIndex(test[0].loc[:, "datetime"].values)
+
+        # reorder
+        train_i = train_i.loc[:, train[i].columns]
+        valid_i = valid_i.loc[:, valid[i].columns]
+        test_i = test_i.loc[:, test[0].columns]
+
+        # save
+        train_scaled.append(train_i)
+        valid_scaled.append(valid_i)
+        test_scaled.append(test_i)
+
         scalers.append(scaler)
 
     return train_scaled, valid_scaled, test_scaled, scalers

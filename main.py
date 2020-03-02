@@ -1,76 +1,92 @@
-from evaluation.postprocessing import rescale
-import numpy as np
+from postprocessing.results import ResultsSubject
+from postprocessing.postprocessing import postprocessing
+from preprocessing.preprocessing import preprocessing
 import sys
 import argparse
 from os.path import join
 from pydoc import locate
-from formatting.raw_to_day_long import raw_to_day_long
-from formatting.train_valid_test_split import train_valid_test_split
-from preprocessing.standardization import standardization
 import misc.constants as cs
-from processing.nested_cross_validation import nested_cross_validation
-from pathlib import Path
+from misc.utils import printd
+from processing.cross_validation import make_predictions, find_best_hyperparameters
 
 """ This is the source code the benchmark GLYFE for glucose prediction in diabetes.
     For more infos on how to use it, go to its Github repository at: https://github.com/dotXem/GLYFE """
 
 
-def main(args):
-    # compute stdout redirection to log file
-    if args.log:
-        sys.stdout = open(join(cs.path, "logs", args.log + ".log"), "w")
-
-    # retrieve the subject
-    subject = args.subject if args.subject is not None else "adult#001"
-
-    # retrieve model class from args
-    model_name = args.model if args.model else "_base"
-    model_class = locate("models." + model_name + "." + model_name.upper())
-
-    # retrieve the prediction horizon
-    ph = args.ph if args.ph else 30
+def main(dataset, subject, model, params, exp, mode, log, ph, plot):
+    printd(dataset, subject, model, params, exp, mode, log, ph, plot)
 
     # retrieve model's parameters
-    params = locate("params." + args.params + ".parameters") if args.params \
-        else locate("params." + model_name + ".parameters")
-    search = locate("params." + args.params + ".search") if args.params \
-        else locate("params." + model_name + ".search")
+    search = locate("processing.params." + params + ".search") if params \
+        else locate("processing.params." + model + ".search")
+    params = locate("processing.params." + params + ".parameters") if params \
+        else locate("processing.params." + model + ".parameters")
+    model_class = locate("processing.models." + model + "." + model.upper())
 
-    """ DATA LOADING AND FORMATTING """
-    data = raw_to_day_long(subject, params["hist"], ph)  # load and format data
-    train, valid, test = train_valid_test_split(data, cv=cs.cv)  # compute processing, validation and testing sets
+    # scale variables in minutes to the benchmark sampling frequency
+    ph_f = ph // cs.freq
+    hist_f = params["hist"] // cs.freq
+    day_len_f = cs.day_len // cs.freq
 
-    """ DATA PREPROCESSING """
-    train, valid, test, scalers = standardization(train, valid, test)  # standardize the data
+    """ PREPROCESSING """
+    train, valid, test, scalers = preprocessing(dataset, subject, ph_f, hist_f, day_len_f)
 
-    """ MODEL TRAINING, TUNING AND EVALUATION """
-    results = nested_cross_validation(subject, model_class, ph, params, search, train, valid, test)
+    """ MODEL TRAINING & TUNING """
+    if search:
+        params = find_best_hyperparameters(subject, model_class, params, search, ph_f, train, valid, test)
 
-    # rescale the results
-    results = rescale(results, scalers)
+    raw_results = make_predictions(subject, model_class, params, ph_f, train, valid, test, mode=mode)
+    """ POST-PROCESSING """
+    raw_results = postprocessing(raw_results, scalers, dataset)
 
-    # save results
-    Path(join(cs.path, "results", model_name, "ph-" + str(ph))).mkdir(parents=True, exist_ok=True)
-    np.save(join(cs.path, "results", model_name, "ph-" + str(ph), subject + ".npy"),
-            np.array(results))
+    """ EVALUATION """
+    results = ResultsSubject(model, exp, ph, dataset, subject, params=params, results=raw_results)
+    printd(results.compute_results())
+    if plot:
+        results.plot(0)
 
 
 if __name__ == "__main__":
     """ The main function contains the following optional parameters:
-            --log: file where the standard outputs will be redirected to (e.g., svr_adult#001); default: logs stay in stdout;
-            --subject: subject for which the benchmark will be run (e.g., "adult#001"); default: adult_1;
-            --model: model on which the benchmark will be run (e.g., "svr"); need to be lowercase; default: _base;
+            --dataset: which dataset to use, should be referenced in misc/datasets.py;
+            --subject: which subject to use, part of the dataset, use the spelling in misc/datasets.py;
+            --model: model on which the benchmark will be run (e.g., "svr"); need to be lowercase; 
+            --params: parameters of the model, usually has the same name as the model (e.g., "svr"); need to be lowercase; 
             --ph: the prediction horizon of the models; default 30 minutes;
-            --params: alternative parameters file (e.g., svr_2); default: %model%; """
+            --exp: experimental folder in which the data will be stored, inside the results directory;
+            --mode: specify is the model is tested on the validation "valid" set or testing "test" set ;
+            --plot: if a plot of the predictions shall be made at the end of the training;
+            --log: file where the standard outputs will be redirected to; default: logs stay in stdout; 
+            
+        Example:
+            python main.py --dataset=ohio --subject=559 --model=base --params=base --ph=30 
+                        --exp=myexp --mode=valid --plot=1 --log=mylog
+    """
 
     """ ARGUMENTS HANDLER """
     # retrieve and process arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--log", type=str)
+    parser.add_argument("--dataset", type=str)
     parser.add_argument("--subject", type=str)
     parser.add_argument("--model", type=str)
-    parser.add_argument("--ph", type=int)
     parser.add_argument("--params", type=str)
+    parser.add_argument("--ph", type=int)
+    parser.add_argument("--exp", type=str)
+    parser.add_argument("--mode", type=str)
+    parser.add_argument("--plot", type=int)
+    parser.add_argument("--log", type=str)
     args = parser.parse_args()
 
-    main(args)
+    # compute stdout redirection to log file
+    if args.log:
+        sys.stdout = open(join(cs.path, "logs", args.log + ".log"), "w")
+
+    main(log=args.log,
+         subject=args.subject,
+         model=args.model,
+         ph=args.ph,
+         params=args.params,
+         exp=args.exp,
+         dataset=args.dataset,
+         mode=args.mode,
+         plot=args.plot)

@@ -96,5 +96,13 @@ To create a new model, one should follow these steps:
     * ```search``` represents the list of the hyperparameters that are automatically optimized with the coarse-to-fine methodology presented in the paper; as for the ```params``` dictionary, one can look at the ```_template``` file to fill it;
 * To run the benchmark on the newly created model, just run the ```main``` function with the name of the model as the ```model``` parameter!
 
+### Add new dataset
+
+### Add new evaluation metric
+
 # TODO
 * Provide with the DOI of the paper once published;
+* Write add new dataset and new evaluation metric parts
+
+
+

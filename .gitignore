@@ -1,6 +1,7 @@
-venv/
 tmp/
 .idea/
+
+grid_search.xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
