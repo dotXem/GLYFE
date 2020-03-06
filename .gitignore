@@ -1,5 +1,6 @@
 tmp/
 .idea/
+results/
 
 grid_search.xlsx
 

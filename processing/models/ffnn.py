@@ -6,6 +6,7 @@ from processing.models.predictor import Predictor
 import numpy as np
 import torch.nn as nn
 from .pytorch_tools.training import fit, predict
+import misc.constants as cs
 
 
 class FFNN(Predictor):
@@ -30,7 +31,7 @@ class FFNN(Predictor):
 
         # save model
         rnd = np.random.randint(1e7)
-        self.checkpoint_file = os.path.join("tmp", "ffnn_weights", str(rnd) + ".pt")
+        self.checkpoint_file = os.path.join(cs.path, "tmp", "ffnn_weights", str(rnd) + ".pt")
         printd("Saved model's file:", self.checkpoint_file)
 
         self.model = self.FFNN_Module(x_train.shape[1],self.params["hidden"], self.params["cell_type"], self.params["dropout"])

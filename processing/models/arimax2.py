@@ -97,7 +97,6 @@ class ARIMAX2(Predictor):
 
         endog = df.loc[:, "glucose_" + str(hist - 1)].values
         if use_exog:
-            # exog = df.loc[:, ["CHO_" + str(hist - 1), "insulin_" + str(hist - 1)]].values
             cho = df.loc[:, ["CHO_" + str(i) for i in range(hist - p, hist)]].values
             ins = df.loc[:, ["insulin_" + str(i) for i in range(hist - p, hist)]].values
 
@@ -108,14 +107,6 @@ class ARIMAX2(Predictor):
             ins[nan_ins] = min_ins * np.ones((len(nan_ins),1))
 
             exog = np.c_[cho,ins]
-            # exog = df.loc[:, np.r_[["CHO_" + str(i) for i in range(hist - p, hist)], ["insulin_" + str(i) for i in
-            #                                                                           range(hist - p, hist)]]].values
-
-            # fill exog nans with default values (standardized 0) as nans are not accepted by SARIMAX
-            # nan_idx = np.where(np.isnan(exog))[0]
-            # default_exog = np.reshape([min_cho[-1],min_ins[-1]],(1,-1))
-            # exog[nan_idx] = np.concatenate([default_exog for _ in range(len(nan_idx))],axis=0)
-            pass
         else:
             exog = None
 
@@ -132,17 +123,8 @@ class ARIMAX2(Predictor):
         t = data.loc[:, "datetime"]
         endog = data.loc[:, endog_cols].values
 
-        #
-        # endog2 = np.concatenate(
-        #     [data.loc[:, "glucose_" + str(hist - 1)].values[i:len(data.index) - p + i + 1].reshape(-1, 1) for i in
-        #      range(p)], axis=1)
-        # for i in range(p-1):
-        #     new_row =
-
         min_cho = data.min(axis=0).loc["CHO_" + str(hist - 1)]
         min_ins = data.min(axis=0).loc["insulin_" + str(hist - 1)]
-        # min_cho = data.min(axis=0).loc[:,"CHO_" + str(hist)]
-        # min_ins = data.min(axis=0).loc[["insulin_" + str(i) for i in range(hist)]][hist-p:].values.reshape(1,-1)
 
         if use_exog:
             cho = data.loc[:, ["CHO_" + str(i) for i in range(hist - p, hist)]].values

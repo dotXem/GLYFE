@@ -36,12 +36,21 @@ class ResultsDataset():
         for subject in self.subjects:
             res_subject = ResultsSubject(self.model, self.experiment, self.ph, self.dataset, subject,
                                          legacy=self.legacy)
-            res.append(res_subject.compute_results())
+            res.append(res_subject.compute_results()[0])  # only the mean
 
         keys = list(res[0].keys())
         res = [list(res_.values()) for res_ in res]
         mean, std = np.nanmean(res, axis=0), np.nanstd(res, axis=0)
         return dict(zip(keys, mean)), dict(zip(keys, std))
+
+    def compute_average_params(self):
+        params = []
+        for subject in self.subjects:
+            res_subject = ResultsSubject(self.model, self.experiment, self.ph, self.dataset, subject,
+                                         legacy=self.legacy)
+            params.append(res_subject.params)
+
+        return dict(zip(params[0].keys(), np.mean([list(_.values()) for _ in params], axis=0)))
 
     def to_latex(self, table="acc", model_name=None):
         """
@@ -56,8 +65,8 @@ class ResultsDataset():
         if table == "cg_ega":
             cg_ega_keys = ["CG_EGA_AP_hypo", "CG_EGA_BE_hypo", "CG_EGA_EP_hypo", "CG_EGA_AP_eu", "CG_EGA_BE_eu",
                            "CG_EGA_EP_eu", "CG_EGA_AP_hyper", "CG_EGA_BE_hyper", "CG_EGA_EP_hyper"]
-            mean = [mean[k] for k in cg_ega_keys]
-            std = [std[k] for k in cg_ega_keys]
+            mean = [mean[k] * 100 for k in cg_ega_keys]
+            std = [std[k] * 100 for k in cg_ega_keys]
         elif table == "acc":
             acc_keys = ["RMSE", "MAPE", "TG"]
             mean = [mean[k] for k in acc_keys]
@@ -65,7 +74,7 @@ class ResultsDataset():
 
         str = "\\textbf{" + name + "} & " + " & ".join(
             ["{0:.2f} $\pm$ {1:.2f}".format(mean_, std_) for mean_, std_ in zip(mean, std)]) + "\\\\"
-        return str
+        print(str)
 
 
 class ResultsSubject():
@@ -141,34 +150,67 @@ class ResultsSubject():
         np.save(os.path.join(dir, self.dataset + "_" + self.subject + ".npy"), [self.params, saveable_results])
         # np.save(os.path.join(dir, self.dataset + "_" + self.subject + ".npy"), np.array())
 
-    def compute_results(self):
+    def compute_results(self, split_by_day=False):
         """
         Compute the results by averaging on the whole days (that can be not continuous, because of cross-validation)
         :return: dictionary with performances per metric
         """
-        rmse_score = np.mean([rmse.RMSE(res_day) for res_day in self.results])
-        mape_score = np.mean([mape.MAPE(res_day) for res_day in self.results])
-        mase_score = np.mean([mase.MASE(res_day, self.ph, self.freq) for res_day in self.results])
-        tg_score = np.mean([time_lag.time_gain(res_day, self.ph, self.freq) for res_day in self.results])
-        cg_ega_score = np.mean([cg_ega.CG_EGA(res_day, self.freq).simplified() for res_day in self.results], axis=0)
+        if split_by_day:
+            results = []
+            for res in self.results:
+                for group in res.groupby(res.index.day):
+                    results.append(group[1])
+        else:
+            results = self.results
 
-        results = {
-            "RMSE": rmse_score,
-            "MAPE": mape_score,
-            "MASE": mase_score,
-            "TG": tg_score,
-            "CG_EGA_AP_hypo": cg_ega_score[0],
-            "CG_EGA_BE_hypo": cg_ega_score[1],
-            "CG_EGA_EP_hypo": cg_ega_score[2],
-            "CG_EGA_AP_eu": cg_ega_score[3],
-            "CG_EGA_BE_eu": cg_ega_score[4],
-            "CG_EGA_EP_eu": cg_ega_score[5],
-            "CG_EGA_AP_hyper": cg_ega_score[6],
-            "CG_EGA_BE_hyper": cg_ega_score[7],
-            "CG_EGA_EP_hyper": cg_ega_score[8],
+        rmse_score = [rmse.RMSE(res_day) for res_day in results]
+        rmse_mean, rmse_std = np.nanmean(rmse_score), np.nanstd(rmse_score)
+
+        mape_score = [mape.MAPE(res_day) for res_day in results]
+        mape_mean, mape_std = np.nanmean(mape_score), np.nanstd(mape_score)
+
+        mase_score = [mase.MASE(res_day, self.ph, self.freq) for res_day in results]
+        mase_mean, mase_std = np.nanmean(mase_score), np.nanstd(mase_score)
+
+        tg_score = [time_lag.time_gain(res_day, self.ph, self.freq, "mse") for res_day in results]
+        tg_mean, tg_std = np.nanmean(tg_score), np.nanstd(tg_score)
+
+        cg_ega_score = [cg_ega.CG_EGA(res_day, self.freq).simplified() for res_day in results]
+        cg_ega_mean, cg_ega_std = np.nanmean(cg_ega_score, axis=0), np.nanstd(cg_ega_score, axis=0)
+
+        mean = {
+            "RMSE": rmse_mean,
+            "MAPE": mape_mean,
+            "MASE": mase_mean,
+            "TG": tg_mean,
+            "CG_EGA_AP_hypo": cg_ega_mean[0],
+            "CG_EGA_BE_hypo": cg_ega_mean[1],
+            "CG_EGA_EP_hypo": cg_ega_mean[2],
+            "CG_EGA_AP_eu": cg_ega_mean[3],
+            "CG_EGA_BE_eu": cg_ega_mean[4],
+            "CG_EGA_EP_eu": cg_ega_mean[5],
+            "CG_EGA_AP_hyper": cg_ega_mean[6],
+            "CG_EGA_BE_hyper": cg_ega_mean[7],
+            "CG_EGA_EP_hyper": cg_ega_mean[8],
         }
 
-        return results
+        std = {
+            "RMSE": rmse_std,
+            "MAPE": mape_std,
+            "MASE": mase_std,
+            "TG": tg_std,
+            "CG_EGA_AP_hypo": cg_ega_std[0],
+            "CG_EGA_BE_hypo": cg_ega_std[1],
+            "CG_EGA_EP_hypo": cg_ega_std[2],
+            "CG_EGA_AP_eu": cg_ega_std[3],
+            "CG_EGA_BE_eu": cg_ega_std[4],
+            "CG_EGA_EP_eu": cg_ega_std[5],
+            "CG_EGA_AP_hyper": cg_ega_std[6],
+            "CG_EGA_BE_hyper": cg_ega_std[7],
+            "CG_EGA_EP_hyper": cg_ega_std[8],
+        }
+
+        return mean, std
 
     def plot(self, day_number=0):
         """
@@ -176,4 +218,4 @@ class ResultsSubject():
         :param day_number: day (int) to plot
         :return: /
         """
-        cg_ega.CG_EGA(self.results[day_number], self.freq).plot(day_number)
+        cg_ega.CG_EGA(self.results[0], self.freq).plot(day_number)
