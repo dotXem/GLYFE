@@ -1,5 +1,5 @@
 parameters = {
-    "hist": 60,
+    "hist": 180,
     "kernel": "rbf",
     "C": [1e-2, 1e3],
     "epsilon": [1e-3,1e-1],

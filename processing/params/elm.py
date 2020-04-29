@@ -1,5 +1,5 @@
 parameters = {
-    "hist": 60,
+    "hist": 180,
     "neurons": [2016, 20160],
     "l2": [1e0, 1e3],
 }

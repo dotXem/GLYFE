@@ -1,5 +1,5 @@
 parameters = {
-    "hist": 60,
+    "hist": 180,
 }
 
 refinements = {
