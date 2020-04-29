@@ -87,7 +87,7 @@ class ARIMAX2(Predictor):
         p = self.params["p"]
         use_exog = int(self.params["use_exog"])
 
-        # create groups of continuous time-series (because of the crossèvalidation rearranging
+        # create groups of continuous time-series (because of the cross-validation rearranging
         df = data.copy()
         df = df.sort_values(by="datetime")
         df = df.resample(str(cs.freq) + 'min', on="datetime").mean()

@@ -73,7 +73,7 @@ class ResultsDataset():
             std = [std[k] for k in acc_keys]
 
         str = "\\textbf{" + name + "} & " + " & ".join(
-            ["{0:.2f} $\pm$ {1:.2f}".format(mean_, std_) for mean_, std_ in zip(mean, std)]) + "\\\\"
+            ["{0:.2f} \\scriptsize{{({1:.2f})}}".format(mean_, std_) for mean_, std_ in zip(mean, std)]) + "\\\\"
         print(str)
 
 

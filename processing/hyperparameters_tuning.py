@@ -53,11 +53,12 @@ def compute_refined_params_grid(params, search, best_params):
             method, num_coarse, num_refined = search[key]
 
             if method == "logarithmic":
-                step = np.ceil((params[key][-1] / params[key][0]) ** (1 / (num_coarse)))
-                mod = [step ** i for i in (np.arange(num_refined) - num_refined // 2) / (num_refined // 2 + 1)]
+                step = (params[key][-1] / params[key][0]) ** (1 / ((num_coarse - 1) * (((num_refined -1) // 2 + 1))))
+                # step = np.ceil((params[key][-1] / params[key][0]) ** (1 / (num_coarse)))
+                mod = [step ** i for i in (np.arange(num_refined) - (num_refined-1) // 2)]
                 best_params_[key] = [val * i for i in mod]
             elif method == "linear":
-                step = np.ceil((params[key][-1] - params[key][0]) / ((num_coarse - 1) * num_refined))
+                step = (params[key][-1] - params[key][0]) / ((num_coarse - 1) * (num_refined-1))
                 mod = step * (np.arange(num_refined) - num_refined // 2)
                 best_params_[key] = [val + i for i in mod]
             elif method == "list":
