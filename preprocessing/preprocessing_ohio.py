@@ -27,7 +27,6 @@ def preprocessing_ohio(dataset, subject, ph, hist, day_len):
     train, valid, test = split(data, day_len, cs.n_days_test, cs.cv)
     [train, valid, test] = [remove_nans(set) for set in [train, valid, test]]
     train, valid, test, scalers = standardize(train, valid, test)
-    print(test[0].shape)
     return train, valid, test, scalers
 
 

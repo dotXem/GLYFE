@@ -1,3 +1,4 @@
+from misc.utils import printd
 import numpy as np
 import misc.constants as cs
 from processing.models.predictor import Predictor
@@ -20,9 +21,9 @@ class ARIMAX2(Predictor):
         self.params = params.copy()
         self.ph = ph
 
-        self.params["hist"] //= cs.freq
-        self.params["p"] //= cs.freq
-        self.params["q"] //= cs.freq
+        self.params["hist"] = int(self.params["hist"] // cs.freq)
+        self.params["p"] = int(self.params["p"] // cs.freq)
+        self.params["q"] = int(self.params["q"] // cs.freq)
 
         self.train_endog, self.train_exog = self._reshape(train)
         self.valid_endog, self.valid_exog, self.valid_target, self.valid_t = self._reshape_test(valid)
@@ -37,26 +38,29 @@ class ARIMAX2(Predictor):
     def fit(self):
         # get training data
         [endog, exog] = self.data_dict["train"]
-        p, d, q = int(self.params["p"]), int(self.params["d"]), int(self.params["q"])
+        p, d, q = self.params["p"], self.params["d"], self.params["q"]
 
         start_params = None
 
+        printd("fitting")
         self.model = SARIMAX(endog=endog,
                              exog=exog,
                              order=(p, d, q),
                              # simple_differencing=True,
                              enforce_invertibility=False,
                              # enforce_stationarity=False,
-                             ).fit(disp=0,
+                             ).fit(disp=1,
                                    method="powell",
                                    start_params=start_params,
-                                   # maxiter=200
+                                   # maxiter=1
                                    )
 
+        printd("end fit")
         pass
 
     def predict(self, dataset):
         # get the data for which we make the predictions
+        printd("predict preprocessing")
         [endog, exog, y_true, t] = self.data_dict[dataset]
         p, d, q, use_exog = int(self.params["p"]), int(self.params["d"]), int(self.params["q"]), int(self.params["use_exog"])
         ph = self.ph
@@ -67,12 +71,14 @@ class ARIMAX2(Predictor):
         else:
             oos_exog = None
 
-
+        printd("predict processing")
         y_pred = []
         for endog_i, exog_i in zip(endog, exog):
             model = self.model.apply(endog_i, exog_i)
             preds = model.forecast(steps=ph, exog=oos_exog)
             y_pred.append(preds[-1])
+
+        printd("end predict")
 
         # print(np.shape(y_pred), np.shape(y_true))
         return self._format_results(y_true, y_pred, t)
@@ -83,9 +89,7 @@ class ARIMAX2(Predictor):
         In particular, we need to compute the endogenous vector and the exogenous vector instead of x and y.
         :param data: array of pandas dataframe containing the data
         """
-        hist = self.params["hist"]
-        p = self.params["p"]
-        use_exog = int(self.params["use_exog"])
+        hist, p, use_exog = self.params["hist"], self.params["p"], self.params["use_exog"]
 
         # create groups of continuous time-series (because of the cross-validation rearranging
         df = data.copy()

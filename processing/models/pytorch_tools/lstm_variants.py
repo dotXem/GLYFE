@@ -136,7 +136,7 @@ class LSTM_Semenuita(nn.Module):
         self.input_cell = nn.Linear(input_size, hidden_size)
         self.input_out = nn.Linear(input_size, hidden_size)
 
-        #TODO remove bias=False ?
+        # remove bias=False ?
         self.hidden_in = nn.Linear(hidden_size, hidden_size, bias=False)
         self.hidden_forget = nn.Linear(hidden_size, hidden_size, bias=False)
         self.hidden_cell = nn.Linear(hidden_size, hidden_size, bias=False)

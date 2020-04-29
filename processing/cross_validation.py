@@ -24,6 +24,8 @@ def make_predictions(subject, model_class, params, ph, train, valid, test, mode=
         model.fit()
         res = model.predict(dataset=mode)
         results.append(res)
+        if mode == "valid":
+            break
     return results
 
 

@@ -53,7 +53,6 @@ class FFNN(Predictor):
         self.model.load_state_dict(torch.load(self.checkpoint_file))
 
         # predict
-        # y_pred = self.model.predict(x, batch_size=self.params["batch_size"])
         y_true, y_pred = predict(self.model, ds)
 
         return self._format_results(y_true, y_pred, t)
