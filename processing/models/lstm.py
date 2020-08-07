@@ -21,8 +21,7 @@ class LSTM(Predictor):
         self.checkpoint_file = os.path.join(cs.path, "tmp", "lstm_weights", str(rnd) + ".pt")
         printd("Saved model's file:", self.checkpoint_file)
 
-        self.model = self.LSTM_Module(x_train.shape[2], self.params["hidden"], self.params["dropout_weights"],
-                                      self.params["dropout_output"])
+        self.model = self.LSTM_Module(x_train.shape[2], self.params["hidden"], self.params["dropout"])
         self.model.cuda()
         self.loss_func = nn.MSELoss()
         self.opt = torch.optim.Adam(self.model.parameters(), lr=self.params["lr"], weight_decay=self.params["l2"])
@@ -65,23 +64,9 @@ class LSTM(Predictor):
         return x, y, t
 
     class LSTM_Module(nn.Module):
-        def __init__(self, n_in, neurons, dropout_weights, dropout_layer):
+        def __init__(self, n_in, neurons, dropout):
             super().__init__()
-
-            # use different LSTM modules depending on the dropout settings
-            if not dropout_weights == 0.0:
-                # TODO handle embedding dropout and layer dropout for LSTM_Gal
-                self.lstm = [LSTM_Gal(n_in, neurons[0], dropout_weights, batch_first=True).cuda()]
-                self.dropouts = []
-                for i in range(len(neurons[1:])):
-                    self.dropouts.append(nn.Dropout(dropout_layer))
-                    self.lstm.append(LSTM_Gal(neurons[i], neurons[i + 1], dropout_weights, batch_first=True).cuda())
-                self.dropouts.append(nn.Dropout(0.0))
-                self.lstm = nn.Sequential(*self.lstm)
-                self.dropouts = nn.Sequential(*self.dropouts)
-            else:
-                self.lstm = nn.LSTM(n_in, neurons[0], len(neurons), dropout=dropout_layer, batch_first=True)
-
+            self.lstm = nn.LSTM(n_in, neurons[0], len(neurons), dropout=dropout, batch_first=True)
             self.linear = nn.Linear(neurons[-1], 1)
 
         def forward(self, xb):

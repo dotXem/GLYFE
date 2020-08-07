@@ -3,11 +3,12 @@ import sys
 from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
+from misc.constants import day_len
 
 
 class Predictor(ABC):
     def __init__(self, subject, ph, params, train, valid, test):
-        self.subject = subject #TODO remove useless
+        self.subject = subject
         self.params = params
         self.ph = ph
 
@@ -25,15 +26,15 @@ class Predictor(ABC):
 
     def _reshape(self, data):
         """
-        Extract (and reshape if needed, depending on the model) the time, inputs, outputs of the data samples
-        :param data: pandas DataFrame containing the samples;
-        :return: time of samples, inputs samples, outputs samples
+        Extract the input variables (x), the time (t), and the objective (y) from the data samples.
+        WARNING : need to be modified to include additional data, or override the function within the models
+        :param data:
+        :return:
         """
 
         t = data["datetime"]
         y = data["y"]
-        # x = data.drop(["y","datetime"], axis=1)
-        x = data.drop(["y","datetime","time"], axis=1)
+        x = data.drop(["y", "datetime", "time"], axis=1)
 
         return x, y, t
 
@@ -49,4 +50,4 @@ class Predictor(ABC):
             sys.exit(-1)
 
     def _format_results(self, y_true, y_pred, t):
-        return pd.DataFrame(data=np.c_[y_true,y_pred],index=pd.DatetimeIndex(t.values),columns=["y_true", "y_pred"])
+        return pd.DataFrame(data=np.c_[y_true, y_pred], index=pd.DatetimeIndex(t.values), columns=["y_true", "y_pred"])

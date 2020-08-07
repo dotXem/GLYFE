@@ -14,7 +14,6 @@ class POLY(Predictor):
     def fit(self):
         # get training data
         x, y, t = self._str2dataset("train")
-        x = x["time"].values.reshape(-1, 1)
 
         # compute the polynomial features
         self.poly_transform = PolynomialFeatures(degree=int(self.params["degree"]))
@@ -29,7 +28,6 @@ class POLY(Predictor):
     def predict(self, dataset):
         # get the data for which we make the predictions
         x, y, t = self._str2dataset(dataset)
-        x = x["time"].values.reshape(-1, 1)
 
         # compute the polynomial features
         x = self.poly_transform.transform(x)
@@ -39,3 +37,10 @@ class POLY(Predictor):
         y_true = y.values
 
         return self._format_results(y_true, y_pred, t)
+
+    def _reshape(self, data):
+        t = data["datetime"]
+        y = data["y"]
+        x = data["time"].values.reshape(-1,1)
+
+        return x, y, t

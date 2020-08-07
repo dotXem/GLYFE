@@ -4,12 +4,14 @@ import itertools
 import time
 from pydoc import locate
 
+
 def timeit(method):
     """
         Decorator function that print the time a function took to complete.
         :param method: function
         :return: time elapsed
     """
+
     def timed(*args, **kw):
         ts = time.time()
         result = method(*args, **kw)
@@ -31,11 +33,11 @@ def locate_model(model_name):
 
 
 def locate_params(params_name):
-    return locate ("processing.models.params." + params_name + ".parameters")
+    return locate("processing.models.params." + params_name + ".parameters")
 
 
 def locate_search(params_name):
-    return locate ("processing.models.params." + params_name + ".search")
+    return locate("processing.models.params." + params_name + ".search")
 
 
 def printd(*msg):
@@ -47,6 +49,7 @@ def printd(*msg):
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(date, " ".join(str(v) for v in msg))
     sys.stdout.flush()
+
 
 def dict_cartesian_product(dict):
     """

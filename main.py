@@ -4,7 +4,7 @@ from preprocessing.preprocessing import preprocessing
 import sys
 import argparse
 from os.path import join
-from pydoc import locate
+from misc.utils import locate_model, locate_params, locate_search
 import misc.constants as cs
 from misc.utils import printd
 from processing.cross_validation import make_predictions, find_best_hyperparameters
@@ -17,11 +17,9 @@ def main(dataset, subject, model, params, exp, mode, log, ph, plot):
     printd(dataset, subject, model, params, exp, mode, log, ph, plot)
 
     # retrieve model's parameters
-    search = locate("processing.params." + params + ".search") if params \
-        else locate("processing.params." + model + ".search")
-    params = locate("processing.params." + params + ".parameters") if params \
-        else locate("processing.params." + model + ".parameters")
-    model_class = locate("processing.models." + model + "." + model.upper())
+    search = locate_search(params)
+    params = locate_params(params)
+    model_class = locate_model(model)
 
     # scale variables in minutes to the benchmark sampling frequency
     ph_f = ph // cs.freq
