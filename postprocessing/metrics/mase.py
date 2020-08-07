@@ -9,6 +9,7 @@ def MASE(results, ph, freq):
         :param freq: sampling frequency in minutes
         :return: fitness
     """
+    results = results.resample(str(freq) + "min").mean() # if not resampled already
     ph_f = ph // freq
     y_true, y_pred = results.values.transpose()
     num = np.nanmean(np.abs(y_true - y_pred))

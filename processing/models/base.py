@@ -6,6 +6,9 @@ class BASE(Predictor):
     The BASE model predict at horizon PH (i.e., at time t+PH) that the glucose value is the same as at time t.
     """
 
+    def fit(self):
+        pass
+
     def predict(self, dataset):
         x, y, t = self._str2dataset(dataset)
         g_col = [col for col in x.columns if "glucose" in col]
