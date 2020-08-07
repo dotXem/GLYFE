@@ -30,7 +30,6 @@ def main(dataset, subject, model, params, exp, mode, log, ph, plot):
 
     """ PREPROCESSING """
     train, valid, test, scalers = preprocessing(dataset, subject, ph_f, hist_f, day_len_f)
-
     """ MODEL TRAINING & TUNING """
     if search:
         params = find_best_hyperparameters(subject, model_class, params, search, ph_f, train, valid, test)

@@ -16,7 +16,7 @@ def reshape_results(results, freq):
     # resampling
     start_time = datetime.strptime(results.index[0].strftime('%Y-%m-%d'), '%Y-%m-%d').strftime("%Y-%m-%d %H:%M:%S")
     end_time = (datetime.strptime(results.index[-1].strftime('%Y-%m-%d'), '%Y-%m-%d') + timedelta(days=1) - timedelta(
-        minutes=freq)).strftime("%Y-%m-%d %H:%M:%S")
+        minutes=float(freq))).strftime("%Y-%m-%d %H:%M:%S")
     index = pd.period_range(start=start_time, end=end_time, freq=str(freq) + 'min').to_timestamp()
     results = results.resample(str(freq) + 'min').mean()
     results = results.reindex(index=index)

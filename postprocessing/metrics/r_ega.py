@@ -100,3 +100,11 @@ class R_EGA():
         ])
 
         return np.concatenate([A, B, uC, lC, uD, lD, uE, lE], axis=1)
+
+    def mean(self):
+        return np.mean(self.full(), axis=0)
+
+    def a_plus_b(self):
+        full = self.full()
+        a_plus_b = full[:, 0] + full[:, 1]
+        return np.sum(a_plus_b) / len(a_plus_b)
