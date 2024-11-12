@@ -131,10 +131,3 @@ To create a new evaluation metric ```newmetric```, one should:
 * create the ```postprocessing/metrics/newmetric.py``` file, with the ```NEWMETRIC(results)``` function returning a numerical score;
 * append the metric to the ```postprocessing/metrics/__init__.py``` file;
 * append the line ```newmetric_score = np.mean([newmetric.NEWMETRIC(res_day) for res_day in self.results])``` in the ```postprocessing.results.ResultsSubject.compute_results()``` function and a field in the ```results``` dictionary returned by the function;
-
-
-# TODO
-* Provide with the DOI of the paper once published;
-
-
-
