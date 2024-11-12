@@ -1,8 +1,22 @@
 # GLYFE (GLYcemia Forecasting Evaluation)
 
-[![DOI](https://zenodo.org/badge/184261006.svg)](https://zenodo.org/badge/latestdoi/184261006)
+GLYFE is a glucose predictive models benchmark as described in the paper [GLYFE: Review and Benchmark of Personalized Glucose Predictive Models in Type-1 Diabetes](https://arxiv.org/pdf/2006.15946) published in Medical & Biological Engineering & Computing in 2022.
 
-GLYFE is a glucose predictive models benchmark.
+To cite the paper:
+```
+@article{debois2022glyfe,
+  title={GLYFE: review and benchmark of personalized glucose predictive models in type 1 diabetes},
+  author={De Bois, Maxime and Yacoubi, Moun{\^\i}m A El and Ammi, Mehdi},
+  journal={Medical \& Biological Engineering \& Computing},
+  volume={60},
+  number={1},
+  pages={1--17},
+  year={2022},
+  publisher={Springer}
+}
+```
+
+[![DOI](https://zenodo.org/badge/184261006.svg)](https://zenodo.org/badge/latestdoi/184261006)
 
 ## Getting Started
 
